@@ -38,8 +38,8 @@ configure do
   client = Google::APIClient.new(
       :application_name => 'Ruby Calendar sample',
       :application_version => '1.0.0')
-  client.authorization.client_id = '584929164737-2ehd7bvh7iv9f3plcdfcohpb9kq5m1ri.apps.googleusercontent.com'
-  client.authorization.client_secret = 'W_eRqavVE-fvgAGYzcu9yUtY'
+  client.authorization.client_id = '584929164737-aonbt0og06f981nfribu0aejcnjfluh6.apps.googleusercontent.com'
+  client.authorization.client_secret = 'FTDuIeH-E26hfRpN47IfVnnw'
   client.authorization.scope = 'https://www.googleapis.com/auth/calendar.readonly'
   calendar = client.discovered_api('calendar', 'v3')
 
