@@ -10,8 +10,6 @@ set :bind, '0.0.0.0'
 enable :sessions
 
 
-
-
 CREDENTIAL_STORE_FILE = "#{$0}-oauth2.json"
 
 def logger; settings.logger end
@@ -86,47 +84,64 @@ end
 # end
 get '/' do
   # Fetch list of calendar ids
-  # calendars = api_client.execute(:api_method => calendar_api.calendar_list.list,
-  #                             :parameters => {'fields' => 'items/id'},
-  #                             :authorization => user_credentials)
-  # # calendar = MultiJson.load(calendars)
-  # calendars_data = calendars.data.to_json
-  # calendars_json = MultiJson.load(calendars_data, :symbolize_keys => true)
-  # calendar_id = calendars_json[:items]
-  # [calendar_id.to_s]
-  calendar_ids = ["qt9d6jt3uavvqe8oak48kmlqn0@group.calendar.google.com"]
-  # cal_id_count = calendar_id.length
+  calendars = api_client.execute(:api_method => calendar_api.calendar_list.list,
+                              :parameters => {'fields' => 'items/id'},
+                              :authorization => user_credentials)
+  calendars_json = calendars.data.to_json
+  calendars_hash = MultiJson.load(calendars_json, :symbolize_keys => true)
+  calendar_id_list = calendars_hash[:items]
+  File.write('cal-ids-hash.dbg', calendar_id_list)
+  cal_id_count = calendar_id_list.length
+  calendar_ids = []
   i=0
   # create array of ids
-  # while i < cal_id_count
-  #   calendar_id[i].each do |key, id|
-  #     calendar_ids << id
-  #   end
-  #   i = i+1
-  # end
-  File.write('cal-ids', calendar_ids)
+  while i < cal_id_count
+    calendar_id_list[i].each do |key, id|
+      calendar_ids << id
+    end
+    i = i+1
+  end
+  File.write('cal-ids.dbg', calendar_ids)
   # [all]
   # erb <hr>
   # erb ids(calendars)
   # for each cal id, pull event id
-  timeMin = "2014-03-31T00:00:00"
-  timeMax = "2014-03-31T23:59:00"
+  timeMin = "2014-03-31T04:00:00Z"
+  timeMax = "2014-04-01T04:00:00Z"
   event_ids = []
-  for x in calendar_ids do
+  events = []
+  calendar_ids.each do |x|
+    # events << "begin cal #{x}"
     events_list = api_client.execute(:api_method => calendar_api.events.list,
-                              :parameters => {'calendarId' => x, "fields" => "items(id)" },
+                              :parameters => {'calendarId' => x, 'singleEvents' => "true", "timeMin" => timeMin, "timeMax" => timeMax,  "fields" => "items/id" },
                               :authorization => user_credentials)
-    events_list_data = events_list.data.to_json
-    events_list_json = MultiJson.load(events_list_data, :symbolize_keys => true)
-    event_id = events_list_json[:items]
-    event_ids << event_id
+    events_list_json = events_list.data.to_json
+    events_list_hash = MultiJson.load(events_list_json, :symbolize_keys => true)
+    event_id = events_list_hash[:items]
+   
+    event_id_count = event_id.length
+    n = 0
+    while n < event_id_count
+      event_id[n].each do |key, id|
+        event_ids << id
+      end
+      n = n+1
+    end
+    
+    for y in event_ids do
+      event = api_client.execute(:api_method => calendar_api.events.get,
+                                :parameters => {'calendarId' => x, 'eventId' => y, "fields" => "description,htmlLink,location,originalStartTime,start,end,summary,updated" },
+                                :authorization => user_credentials)
+      event_data = event.data.to_json
+      event_json = MultiJson.load(event_data, :symbolize_keys => true)
+      unless event_json[:error]
+        events << event_json
+      end
+
+      
+    end
   end
-  File.write('events_list-ids', event_ids)
-    event = api_client.execute(:api_method => calendar_api.events.list,
-                              :parameters => {'calendarId' => x, "fields" => "items(id)" },
-                              :authorization => user_credentials)
-    events_data = events.data.to_json
-    events_json = MultiJson.load(events_data, :symbolize_keys => true)
-    event_id = events_json[:items]
-    event_ids << event_id
+  File.write('event_ids.dbg', event_ids)
+  File.write('events.dbg', events)
+  [events.to_json]
 end
