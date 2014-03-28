@@ -42,7 +42,7 @@ configure do
       :application_version => '1.0.0')
   client.authorization.client_id = '584929164737-2ehd7bvh7iv9f3plcdfcohpb9kq5m1ri.apps.googleusercontent.com'
   client.authorization.client_secret = 'W_eRqavVE-fvgAGYzcu9yUtY'
-  client.authorization.scope = 'https://www.googleapis.com/auth/calendar'
+  client.authorization.scope = 'https://www.googleapis.com/auth/calendar.readonly'
   calendar = client.discovered_api('calendar', 'v3')
 
   set :logger, logger
@@ -86,24 +86,24 @@ end
 # end
 get '/' do
   # Fetch list of calendar ids
-  calendars = api_client.execute(:api_method => calendar_api.calendar_list.list,
-                              :parameters => {'fields' => 'items/id'},
-                              :authorization => user_credentials)
-  # calendar = MultiJson.load(calendars)
-  calendars_data = calendars.data.to_json
-  calendars_json = MultiJson.load(calendars_data, :symbolize_keys => true)
-  calendar_id = calendars_json[:items]
-  [calendar_id.to_s]
-  calendar_ids = []
-  cal_id_count = calendar_id.length
+  # calendars = api_client.execute(:api_method => calendar_api.calendar_list.list,
+  #                             :parameters => {'fields' => 'items/id'},
+  #                             :authorization => user_credentials)
+  # # calendar = MultiJson.load(calendars)
+  # calendars_data = calendars.data.to_json
+  # calendars_json = MultiJson.load(calendars_data, :symbolize_keys => true)
+  # calendar_id = calendars_json[:items]
+  # [calendar_id.to_s]
+  calendar_ids = ["qt9d6jt3uavvqe8oak48kmlqn0@group.calendar.google.com"]
+  # cal_id_count = calendar_id.length
   i=0
   # create array of ids
-  while i < cal_id_count
-    calendar_id[i].each do |key, id|
-      calendar_ids << id
-    end
-    i = i+1
-  end
+  # while i < cal_id_count
+  #   calendar_id[i].each do |key, id|
+  #     calendar_ids << id
+  #   end
+  #   i = i+1
+  # end
   File.write('cal-ids', calendar_ids)
   # [all]
   # erb <hr>
@@ -113,13 +113,20 @@ get '/' do
   timeMax = "2014-03-31T23:59:00"
   event_ids = []
   for x in calendar_ids do
-    events = api_client.execute(:api_method => calendar_api.events.list,
+    events_list = api_client.execute(:api_method => calendar_api.events.list,
+                              :parameters => {'calendarId' => x, "fields" => "items(id)" },
+                              :authorization => user_credentials)
+    events_list_data = events_list.data.to_json
+    events_list_json = MultiJson.load(events_list_data, :symbolize_keys => true)
+    event_id = events_list_json[:items]
+    event_ids << event_id
+  end
+  File.write('events_list-ids', event_ids)
+    event = api_client.execute(:api_method => calendar_api.events.list,
                               :parameters => {'calendarId' => x, "fields" => "items(id)" },
                               :authorization => user_credentials)
     events_data = events.data.to_json
     events_json = MultiJson.load(events_data, :symbolize_keys => true)
     event_id = events_json[:items]
     event_ids << event_id
-  end
-  File.write('events-ids', event_ids)
 end
