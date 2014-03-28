@@ -8,7 +8,7 @@ require 'logger'
 require 'multi_json'
 set :bind, '0.0.0.0'
 enable :sessions
-
+enable :logging, :dump_errors, :raise_errors
 
 CREDENTIAL_STORE_FILE = "#{$0}-oauth2.json"
 
@@ -91,7 +91,8 @@ get '/' do
   calendars_hash = MultiJson.load(calendars_json, :symbolize_keys => true)
   calendar_id_list = calendars_hash[:items]
   File.write('cal-ids-hash.dbg', calendar_id_list)
-  cal_id_count = calendar_id_list.length
+  
+  cal_id_count = calendar_id_list.to_a.length
   calendar_ids = []
   i=0
   # create array of ids
@@ -143,5 +144,5 @@ get '/' do
   end
   File.write('event_ids.dbg', event_ids)
   File.write('events.dbg', events)
-  [events.to_json]
+  [events.to_s]
 end
