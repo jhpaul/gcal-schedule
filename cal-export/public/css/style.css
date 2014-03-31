@@ -1,0 +1,41 @@
+td {
+	width: auto;
+	padding: 3px 5px;
+	border-right: 0px;
+	text-align: center;
+	border-bottom: 2px black solid;
+}
+tr:nth-child(even) td{
+	background-color: #EFEEF2;
+}
+table {
+	border-spacing: 0;
+	width: 100%;
+}
+#logo {
+	width: 2in;
+	float: left;
+	-webkit-filter: grayscale(100%) saturate(200%);
+	-moz-filter: grayscale(100%);
+	filter: grayscale(100%);
+
+}
+h1 {
+	float: right;
+	vertical-align: top;
+	margin-top: 0;
+	padding-top: 0;
+}
+h2 {
+	clear: both;
+	text-align: center;
+}
+
+    html { width:8in; height: 10in; }
+    body {
+    	font-family: Verdana;
+    	font-weight: 700;
+    	font-size:  8pt;
+    }
+
+    

@@ -1,0 +1,23 @@
+!!!
+%html
+  %head
+    %title Room Schedule
+    %link{rel: 'stylesheet', href: '/css/style.css'}
+  %body
+    - date = DateTime.strptime(@events[0][:start][:dateTime],"%Y-%m-%d").strftime("%A, %B %d, %Y")
+    %img#logo(src="/img/logo-bw-500.png")
+    %h1 Room Schedule
+    %h2= date
+    %table#schedule
+      %tbody
+        - @events.each do |row|
+          %tr
+            / %td= row
+            - start = DateTime.strptime(row[:start][:dateTime],"%Y-%m-%dT%H:%M:%S%z")
+            - stop = DateTime.strptime(row[:end][:dateTime],"%Y-%m-%dT%H:%M:%S%z")
+            - link = event_link(row[:htmlLink],row[:summary])
+            %td= link
+            %td= row[:location]
+            %td= start.strftime("%l:%M %p")
+            / %td= start.strftime("%m/%d/%Y")
+            %td= stop.strftime("%l:%M %p")
