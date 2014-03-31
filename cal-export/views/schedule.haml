@@ -2,22 +2,55 @@
 %html
   %head
     %title Room Schedule
-    %link{rel: 'stylesheet', href: '/css/style.css'}
+    %link{rel: 'stylesheet', href: '/css/style.css', type: 'text/css'}
+    %link{rel: 'stylesheet', href: '/css/print.css', type: 'text/css', media: 'print'}
   %body
-    - date = DateTime.strptime(@events[0][:start][:dateTime],"%Y-%m-%d").strftime("%A, %B %d, %Y")
-    %img#logo(src="/img/logo-bw-500.png")
-    %h1 Room Schedule
-    %h2= date
+    %header
+    - if @eventsSort != nil 
+      - dateLocal = DateTime.strptime(@eventsSort[1][:start][:dateTime],"%Y-%m-%d")
+      - dateStr = dateLocal.strftime("%A, %B %d, %Y")
+      %img#logo(src="/img/logo-bw-500.png")
+      %h2= dateStr
+      %h1 Room Schedule
+    - else
+      #error No Events Found
+
+    %aside
+      / %p= "Requested date: " + @post_date
+      %p.reset
+        Reset all hidden rows
+      %p
+        Document should be printed with margins set to zero and background colors on.<br><br>Recommend you review print preview first.<br><br>Hide, Reset, and this box will not be printed.
+
     %table#schedule
+      %thead
+        %tr
+          %td.hide
+          %td Event
+          %td Location
+          %td Begin
+          %td End
       %tbody
-        - @events.each do |row|
+        - @eventsSort.each do |row|
           %tr
+            %td.hide hide
             / %td= row
             - start = DateTime.strptime(row[:start][:dateTime],"%Y-%m-%dT%H:%M:%S%z")
             - stop = DateTime.strptime(row[:end][:dateTime],"%Y-%m-%dT%H:%M:%S%z")
             - link = event_link(row[:htmlLink],row[:summary])
-            %td= link
-            %td= row[:location]
-            %td= start.strftime("%l:%M %p")
+            %td.event= link
+            %td.room= row[:location]
+            %td.start= start.strftime("%l:%M %p")
             / %td= start.strftime("%m/%d/%Y")
-            %td= stop.strftime("%l:%M %p")
+            %td.end= stop.strftime("%l:%M %p")
+
+%script{:src => "//code.jquery.com/jquery-1.10.2.js"}
+:javascript
+  $(document).ready( function() {
+      $( ".hide" ).click(function() {
+        $(this).parent().toggle();
+      });
+      $(".reset").click(function(){
+        $("tr").show();
+      })
+  } );

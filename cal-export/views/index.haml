@@ -7,3 +7,27 @@
     %h1 Welcome
     %p
       Welcome to my website made with Sinatra \
+    #loading
+      #movingBallG
+        .movingBallLineG
+        #movingBallG_1.movingBallG
+      %p
+        Loading... (this could take a while) 
+%form{ :action => "", :method => "post"}
+  %fieldset
+    %ol
+      %li
+        %label{:for => "date"} Date:
+        %input{:type => "text", :name => "date", :class => "date", :id => "date"}
+    %input{:type => "submit", :value => "Send", :class => "button"}
+
+%script{:src => "//code.jquery.com/jquery-1.10.2.js"}
+%link{rel: "stylesheet", href: "//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css"}
+%script{:src => "//code.jquery.com/ui/1.10.4/jquery-ui.js"}
+:javascript
+  $(document).ready( function() {
+      $( ".button" ).click(function() {
+        $("#loading").toggle();
+      });
+      $( "#date" ).datepicker({ dateFormat: "yy-mm-dd" });
+  });

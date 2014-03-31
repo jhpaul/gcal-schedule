@@ -15,9 +15,7 @@ table {
 #logo {
 	width: 2in;
 	float: left;
-	-webkit-filter: grayscale(100%) saturate(200%);
-	-moz-filter: grayscale(100%);
-	filter: grayscale(100%);
+	padding-bottom: 7px;
 
 }
 h1 {
@@ -27,15 +25,268 @@ h1 {
 	padding-top: 0;
 }
 h2 {
-	clear: both;
+	/*clear: both;*/
 	text-align: center;
+	margin-left: auto;
+	margin-right: auto;
+	padding-top: 10px;
 }
 
-    html { width:8in; height: 10in; }
+    html { width:7.5in; height: 10in; padding: 0; margin: 0; position: absolute}
     body {
+    	position: absolute;
+    	margin: 0;
+    	width:7.5in; height: 10in;
     	font-family: Verdana;
     	font-weight: 700;
     	font-size:  8pt;
+    	padding: 0.5in;
     }
 
-    
+a {
+	text-decoration: none;
+	border-bottom: none;
+	color: black
+}
+header {
+	text-align: center;
+	padding-bottom: 15px;
+}
+header *{
+	display: inline-block;
+	text-align: center;
+	vertical-align: middle;
+	/*width: 28% !important;*/
+	/*margin: 2%*/
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+/*a.hide:focus ~ tr {
+	display: none;
+}
+*/
+thead td {
+	font-size: 1.3em;
+}
+
+aside {
+	margin-left: 8.5in;
+	width: 200px;
+	padding:10px;
+    border: 2px solid black;
+    position: fixed;
+}
+.reset {
+	padding: 5px;
+	background-color: #C6F7EE;
+}
+.hide {
+	background-color: #F6E7EA !important;
+}
+#loading{
+	display:none;
+}
+#loading > * {
+	display: inline-block;
+	padding-right: 5px;
+}
+
+
+@media all and (max-width: 520px) {
+	body, html {
+		width: 100%;
+		padding: 0;
+		padding-right: 5px;
+	}
+	.room {
+		/*float: left;*/
+		display: table-cell;
+		font-size: 1.3em;
+	}
+	.event {
+		/*float: right;*/
+		display: table-cell;
+	}
+	.start {
+		/*float: right;*/
+		display: table-cell;
+	}
+	.start:before {
+		content: ("\a")
+	}
+	.end {
+		/*float: right;*/
+		display: table-cell;
+	}
+	header * {
+		display: block;
+		width: 100%;
+		float: none !important;
+	}
+	#logo {
+		width: inherit;
+		padding: auto;
+		height: 50px;
+		margin: auto;
+	}
+	thead {
+		display: none;
+	}
+	tr {
+		line-height: 2;
+		display: table-row;
+	}
+	td {
+		display: inline-block;
+		border-bottom: 1px solid grey;
+	}
+	table {
+		display: table;
+	}
+    .hide, aside {
+		display: none;
+	}
+}
+}
+@media print and (color){
+	.hide {
+		display: none !important;
+		visibility: hidden !important;
+	}
+	aside {
+		display: none !important;
+		visibility: hidden !important;
+	}
+	td {
+		page-break-inside: avoid;
+	}
+	* {
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+   }
+}
+
+#movingBallG{
+position:relative;
+width:100px;
+height:8px;
+}
+
+.movingBallLineG{
+position:absolute;
+left:0px;
+top:3px;
+height:2px;
+width:100px;
+background-color:#949494;
+}
+
+.movingBallG{
+background-color:#000000;
+position:absolute;
+top:0;
+left:0;
+width:8px;
+height:8px;
+-moz-border-radius:4px;
+-moz-animation-name:bounce_movingBallG;
+-moz-animation-duration:1.3s;
+-moz-animation-iteration-count:infinite;
+-moz-animation-direction:linear;
+-webkit-border-radius:4px;
+-webkit-animation-name:bounce_movingBallG;
+-webkit-animation-duration:1.3s;
+-webkit-animation-iteration-count:infinite;
+-webkit-animation-direction:linear;
+-ms-border-radius:4px;
+-ms-animation-name:bounce_movingBallG;
+-ms-animation-duration:1.3s;
+-ms-animation-iteration-count:infinite;
+-ms-animation-direction:linear;
+-o-border-radius:4px;
+-o-animation-name:bounce_movingBallG;
+-o-animation-duration:1.3s;
+-o-animation-iteration-count:infinite;
+-o-animation-direction:linear;
+border-radius:4px;
+animation-name:bounce_movingBallG;
+animation-duration:1.3s;
+animation-iteration-count:infinite;
+animation-direction:linear;
+}
+
+@-moz-keyframes bounce_movingBallG{
+0%{
+left:0px;
+}
+
+50%{
+left:92px;
+}
+
+100%{
+left:0px;
+}
+
+}
+
+@-webkit-keyframes bounce_movingBallG{
+0%{
+left:0px;
+}
+
+50%{
+left:92px;
+}
+
+100%{
+left:0px;
+}
+
+}
+
+@-ms-keyframes bounce_movingBallG{
+0%{
+left:0px;
+}
+
+50%{
+left:92px;
+}
+
+100%{
+left:0px;
+}
+
+}
+
+@-o-keyframes bounce_movingBallG{
+0%{
+left:0px;
+}
+
+50%{
+left:92px;
+}
+
+100%{
+left:0px;
+}
+
+}
+
+@keyframes bounce_movingBallG{
+0%{
+left:0px;
+}
+
+50%{
+left:92px;
+}
+
+100%{
+left:0px;
+}
+
+}

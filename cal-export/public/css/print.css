@@ -1,0 +1,83 @@
+td {
+	width: auto;
+	padding: 3px 5px;
+	border-right: 0px;
+	text-align: center;
+	border-bottom: 2px black solid;
+}
+tr:nth-child(even) td{
+	background-color: #EFEEF2;
+}
+table {
+	border-spacing: 0;
+	width: 100%;
+}
+#logo {
+	width: 2in;
+	float: left;
+	padding-bottom: 7px;
+
+}
+h1 {
+	float: right;
+	vertical-align: top;
+	margin-top: 0;
+	padding-top: 0;
+}
+h2 {
+	/*clear: both;*/
+	text-align: center;
+	margin: auto;
+	padding-top: 10px;
+}
+
+    html { width:7.5in; height: 10in; padding: 0; margin: 0; position: absolute}
+    body {
+    	position: absolute;
+    	margin: 0;
+    	width:7.5in; height: 10in;
+    	font-family: Verdana;
+    	font-weight: 700;
+    	font-size:  8pt;
+    	padding: 0.5in;
+    }
+
+a {
+	text-decoration: none;
+	border-bottom: none;
+	color: black
+}
+header {
+	text-align: center;
+	padding-bottom: 15px;
+}
+header *{
+	display: inline-block;
+	text-align: center;
+	vertical-align: middle;
+	/*width: 28% !important;*/
+	/*margin: 2%*/
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+
+
+@media print and (color){
+	.hide {
+		display: none !important;
+		visibility: hidden !important;
+	}
+	aside {
+		display: none !important;
+		visibility: hidden !important;
+	}
+	td {
+		page-break-inside: avoid;
+	}
+	* {
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+   }
+}
