@@ -42,8 +42,8 @@ configure do
       :application_name => 'Ruby Calendar sample',
       :application_version => '1.0.0')
   #Dev
-  client.authorization.client_id = '584929164737-q22b7lqo3pnuni5niet4bvaue0faa6eg.apps.googleusercontent.com'
-  client.authorization.client_secret = 's61u234QtFUSsyzAS4GKTa-k'
+  client.authorization.client_id = '584929164737-tjb9o70hdqgbak7rf8ou0ieq1hqc4roq.apps.googleusercontent.com'
+  client.authorization.client_secret = 'krNcqvYNlqOE9ML_svlRq2jT'
   #Production
   # client.authorization.client_id = '584929164737-aonbt0og06f981nfribu0aejcnjfluh6.apps.googleusercontent.com'
   # client.authorization.client_secret = 'FTDuIeH-E26hfRpN47IfVnnw'
@@ -116,6 +116,7 @@ get '/s/:post_date' do
 end
 
 get '/events/:post_date' do |d|
+  
   # Fetch list of calendar ids
   calendars = api_client.execute(:api_method => calendar_api.calendar_list.list,
                               :parameters => {'fields' => 'items/id'},
@@ -144,58 +145,59 @@ get '/events/:post_date' do |d|
   # timeMax = "2014-04-01T04:00:00Z"
   timeMin = DateTime.strptime("#{d}", "%Y-%m-%d")
   timeMax = timeMin + 24*60*60
+  events_list = nil
   event_ids = []
-  events = []
+  events = []  
+  batch = Google::APIClient::BatchRequest.new do |result|
+    events_list = result
+  end
+  events_list_batch ={}
   calendar_ids.each do |x|
     # events << "begin cal #{x}"
-    events_list = api_client.execute(:api_method => calendar_api.events.list,
-                              :parameters => {'calendarId' => x, 'singleEvents' => "true", "timeMin" => timeMin, "timeMax" => timeMax,  "fields" => "items/id" },
-                              :authorization => user_credentials)
+    events_list_batch = {:api_method => calendar_api.events.list,
+                              :parameters => {'calendarId' => x, 'singleEvents' => "true","timeMin" => timeMin, "timeMax" => timeMax , "fields" => "items(id,iCalUID,organizer(email,id))" },
+                              :authorization => user_credentials}
+    batch.add(events_list_batch)
+  end
+  
+  api_client.execute(batch,:authorization => user_credentials, :parameters => {"timeMin" => timeMin, "timeMax" => timeMax }) 
     events_list_json = events_list.data.to_json
     events_list_hash = MultiJson.load(events_list_json, :symbolize_keys => true)
-    event_id = events_list_hash[:items]
-   
-    event_id_count = event_id.length
-    n = 0
-    while n < event_id_count
-      event_id[n].each do |key, id|
-        event_ids << id
-      end
-      n = n+1
+    events_list_hash[:items].each do |x|
+      event_ids << x
     end
-    # page_token = nil
-    #   result = api_client.execute(:api_method => service.events.list,
-    #                           :parameters => {'calendarId' => 'primary'})
-    #   while true
-    #     events = result.data.items
-    #     events.each do |e|
-    #       print e.summary + "\n"
-    #     end
-    #     if !(page_token = result.data.next_page_token)
-    #       break
-    #     end
-    #     result = client.execute(:api_method => service.events.list,
-    #                             :parameters => {'calendarId' => 'primary',
-    #                                             'pageToken' => page_token})
-    #   end
-    
-    for y in event_ids do
-      event = api_client.execute(:api_method => calendar_api.events.get,
-                                :parameters => {'calendarId' => x, 'eventId' => y, "fields" => "description,htmlLink,location,originalStartTime,start,end,summary,updated" },
-                                :authorization => user_credentials)
-      event_data = event.data.to_json
-      event_json = MultiJson.load(event_data, :symbolize_keys => true)
-      unless event_json[:error]
-        events << event_json
-      end
+    # I think this is broken
+    [event_ids.to_s]
+ #  batch2 = Google::APIClient::BatchRequest.new do |result|
+ #    event = result
+ #  end
+ #  event_ids.each do |x|
+ #      event = api_client.execute(:api_method => calendar_api.events.get,
+ #                                :parameters => {'calendarId' => x, 'eventId' => y, "fields" => "description,htmlLink,location,originalStartTime,start,end,summary,updated" },
+ #                                :authorization => user_credentials)
+ #      batch.add(event)
+ #  end
+ #  api_client.execute(batch2,:authorization => user_credentials)
+ #  event_data = event.data.to_json
+ #  event_json = MultiJson.load(event_data, :symbolize_keys => true)
+ #  [event_json.to_s]
+ # #   for y in event_ids do
+  #     event = api_client.execute(:api_method => calendar_api.events.get,
+  #                               :parameters => {'calendarId' => x, 'eventId' => y, "fields" => "description,htmlLink,location,originalStartTime,start,end,summary,updated" },
+  #                               :authorization => user_credentials)
+  #     event_data = event.data.to_json
+  #     event_json = MultiJson.load(event_data, :symbolize_keys => true)
+  #     unless event_json[:error]
+  #       events << event_json
+  #     end
 
       
-    end
-  end
-  File.write('event_ids.dbg', event_ids)
-  File.write('events.dbg', events)
-  # [events.to_s]
-  @eventsSort = []
-  @eventsSort = events.sort_by {|a,b| [a[:location], to_datetime(a[:start][:dateTime])]}
-  haml :schedule
+  #   end
+  # end
+  # File.write('event_ids.dbg', event_ids)
+  # File.write('events.dbg', events)
+  # # [events.to_s]
+  # @eventsSort = []
+  # @eventsSort = events.sort_by {|a,b| [a[:location], to_datetime(a[:start][:dateTime])]}
+  # haml :schedule
 end
