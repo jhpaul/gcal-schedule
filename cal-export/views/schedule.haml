@@ -7,8 +7,8 @@
   %body
     %header
     - if @eventsSort != nil 
-      - dateLocal = DateTime.strptime(@eventsSort[1][:start][:dateTime],"%Y-%m-%d")
-      - dateStr = dateLocal.strftime("%A, %B %d, %Y")
+      / - dateLocal = DateTime.strptime(@eventsSort[1][:start][:dateTime],"%Y-%m-%d")
+      - dateStr = @timeMin.strftime("%A, %B %d, %Y")
       %img#logo(src="/img/logo-bw-500.png")
       %h2= dateStr
       %h1 Room Schedule
