@@ -8,6 +8,7 @@ require 'logger'
 require 'multi_json'
 require 'haml'
 require 'sass'
+require 'pdfkit'
 
 set :bind, '0.0.0.0'
 enable :sessions
@@ -92,8 +93,34 @@ helpers do
    return "<a href='#{url}' target='_blank'>#{text}</a>"
   end
   def to_datetime(x)
-    DateTime.strptime(x,"%Y-%m-%dT%H:%M:%S%z")
+    unless x == nil
+      if x.length >10
+        y = DateTime.strptime(x,"%Y-%m-%dT%H:%M:%S%z")
+      else
+        y = DateTime.strptime(x,"%Y-%m-%d")
+      end
+      return y
+    end
+    dbg(x)
+    # dbg(x.length)
   end
+  def from_datetime(z)
+    y = "NODATE"
+    if z.class == DateTime
+      y = z.strftime("%l:%M %p")
+    end
+
+    dbg(y)
+    dbg(y.class)
+    return y
+    # dbg(x.length)
+  end
+  def dbg(value)
+    if value 
+      File.write('debug.dbg',value.to_s+"\n", mode: 'a')
+    end
+  end
+
 end
 get '/' do
   # sass :style
@@ -115,19 +142,45 @@ get '/s/:post_date' do
   haml :schedule
 end
 
+
+get '/pdf/:post_date' do |d|
+  html = haml(:index)
+  kit = PDFKit.new(html)
+  # kit.stylesheets << '/css/print.css'
+  pdf = kit.to_pdf
+end
+
+
+
+
+
+
+
+
+
 get '/events/:post_date' do |d|
+  # File.truncate('debug.dbg', 0)
+  File.write('debug.dbg', "")
+  dbg("begin fetch")
   # Fetch list of calendar ids
   calendars = api_client.execute(:api_method => calendar_api.calendar_list.list,
                               :parameters => {'fields' => 'items/id'},
                               :authorization => user_credentials)
+  dbg("fetch calendar list")
   calendars_json = calendars.data.to_json
   calendars_hash = MultiJson.load(calendars_json, :symbolize_keys => true)
   calendar_id_list = calendars_hash[:items]
   File.write('cal-ids-hash.dbg', calendar_id_list)
   @calIds = []
-  calendar_id_list.each do |x|
-    @calIds << x[:id]
+  if calendar_id_list
+    calendar_id_list.each do |x|
+      @calIds << x[:id]
+    end
+  else
+    ["No Calendar"]
   end
+  dbg("calids created")
+  dbg(@calIds)
   File.write('cal-ids.dbg',@calIds)
   # [all]
   # erb <hr>
@@ -139,19 +192,22 @@ get '/events/:post_date' do |d|
   @timeMin = DateTime.strptime("#{d}", "%Y-%m-%d")
   dateIn = "#{d}"
   dayMin = dateIn[8..10].to_i + 1
-  dayMax = dateIn[0..8]  + dayMin.to_s
+  dayMax = dateIn[0..7]  + dayMin.to_s
   timeMax = DateTime.strptime(dayMax, "%Y-%m-%d")
+  dbg([dateIn,dayMin, dayMax,timeMax])
   # [timeMin.to_s,timeMax.to_s]
   # timeMin = 
   event_ids = []
   events = []
   events_list = nil
+  dbg('pull events')
   batch = Google::APIClient::BatchRequest.new do |result|
     events_list = result.data.to_json
     event = MultiJson.load(events_list, :symbolize_keys => true)
     events << event
 
   end
+
   elist = []
   events_list_batch = nil
   @calIds.each do |x|
@@ -181,6 +237,7 @@ get '/events/:post_date' do |d|
 
     end
     end
+    dbg(@events)
     File.write('events.dbg',@events.to_s)
 
   #   # event_id = events_list_hash[:items]
@@ -226,6 +283,19 @@ get '/events/:post_date' do |d|
   # File.write('events.dbg', events)
   # [events.to_s]
   @eventsSort = []
-  @eventsSort = @events.sort_by {|a,b| [a[:location], to_datetime(a[:start][:dateTime])]}
+   @eventsSort = @events.sort_by {|a|
+    dbg(a)
+    if a != nil
+      if a[:location] !=nil
+        dbg(a[:location]) 
+        if a[:start][:dateTime] != nil 
+          dbg(a[:start][:dateTime])
+        [a[:location], to_datetime(a[:start][:dateTime])]
+      end
+      end
+    end
+    }
+  # @eventsSort = @events
+  dbg("DONE")
   haml :schedule
 end

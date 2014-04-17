@@ -35,15 +35,15 @@
           %tr
             %td.hide hide
             / %td= row
-            - start = DateTime.strptime(row[:start][:dateTime],"%Y-%m-%dT%H:%M:%S%z")
-            - stop = DateTime.strptime(row[:end][:dateTime],"%Y-%m-%dT%H:%M:%S%z")
+            /- dbg(row)
+            - start = to_datetime(row[:start][:dateTime])
+            - stop = to_datetime(row[:end][:dateTime])
             - link = event_link(row[:htmlLink],row[:summary])
             %td.event= link
             %td.room= row[:location]
-            %td.start= start.strftime("%l:%M %p")
+            %td.start= from_datetime(start)
             / %td= start.strftime("%m/%d/%Y")
-            %td.end= stop.strftime("%l:%M %p")
-
+            %td.end= from_datetime(stop)
 %script{:src => "//code.jquery.com/jquery-1.10.2.js"}
 :javascript
   $(document).ready( function() {
