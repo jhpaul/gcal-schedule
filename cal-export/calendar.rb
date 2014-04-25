@@ -180,7 +180,7 @@ get '/events/:post_date' do |d|
     ["No Calendar"]
   end
   dbg("calids created")
-  dbg(@calIds)
+  # dbg(@calIds)
   File.write('cal-ids.dbg',@calIds)
   # [all]
   # erb <hr>
@@ -188,13 +188,23 @@ get '/events/:post_date' do |d|
   # for each cal id, pull event id
   # timeMin = "2014-03-31T04:00:00Z"
   # timeMax = "2014-04-01T04:00:00Z"
-
-  @timeMin = DateTime.strptime("#{d}", "%Y-%m-%d")
-  dateIn = "#{d}"
-  dayMin = dateIn[8..10].to_i + 1
-  dayMax = dateIn[0..7]  + dayMin.to_s
-  timeMax = DateTime.strptime(dayMax, "%Y-%m-%d")
-  dbg([dateIn,dayMin, dayMax,timeMax])
+  if DateTime.strptime("#{d}","%Y-%m-%d").to_time.dst?
+    timeZone = "-04:00"
+  else
+    timeZone = "-05:00"
+  end
+  
+  dateIn = "#{d}"+"T00:00:00" + timeZone
+  
+  @timeMin = DateTime.strptime(dateIn)
+  @timeMax = @timeMin.next
+  dbg([@timeMin.strftime,@timeMax.strftime,])
+  # dayMin = dateIn[8..10].to_i + 1
+  # year = dateIn[0..3].to_i
+  # dayMax = dateIn[0..7]  + dayMin.to_s
+  # DateTime.new(2001,2,3,4,5,6,'-7').to_s
+  # timeMax = DateTime.strptime(dayMax, '%F')
+  # dbg([dateIn,dayMin, dayMax,timeMax])
   # [timeMin.to_s,timeMax.to_s]
   # timeMin = 
   event_ids = []
@@ -214,7 +224,7 @@ get '/events/:post_date' do |d|
   
     # events << "begin cal #{x}"
     events_list_batch = {:api_method => calendar_api.events.list,
-                              :parameters =>  {'calendarId' => x, "timeMin" => @timeMin, "timeMax" => timeMax, "orderBy" => "startTime", 'singleEvents' => "true",
+                              :parameters =>  {'calendarId' => x, "timeMin" => @timeMin.strftime, "timeMax" => @timeMax.strftime, "orderBy" => "startTime", 'singleEvents' => "true",
                               "fields" => "items(description,htmlLink,location,originalStartTime,start,end,summary,updated)" },
                               :authorization => user_credentials}
 

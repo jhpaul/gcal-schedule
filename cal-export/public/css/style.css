@@ -18,20 +18,21 @@ table {
 	padding-bottom: 7px;
 
 }
-h1 {
-	float: right;
+h1, h2 {
+	/*float: right;*/
 	vertical-align: top;
 	margin-top: 0;
+	margin-bottom: 5px;
 	padding-top: 0;
 }
 h2 {
 	/*clear: both;*/
-	text-align: center;
-	margin-left: auto;
-	margin-right: auto;
-	padding-top: 10px;
-}
 
+}
+#float-right {
+	float: right;
+	text-align: right;
+}
     html { width:7.5in; height: 10in; padding: 0; margin: 0; position: absolute}
     body {
     	position: absolute;
