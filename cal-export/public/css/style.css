@@ -1,3 +1,15 @@
+html { width:10.5in; height: 16.7in; padding: 0; margin: 0; position: absolute}
+body {
+	position: absolute;
+	margin: 0;
+	/*width:7.5in; height: 10in;*/
+	font-family: Verdana;
+	font-weight: 700;
+	width: 100%;
+	font-size:  1.2em;
+	padding:0 0.5in;
+}
+
 td {
 	width: auto;
 	padding: 3px 5px;
@@ -8,12 +20,15 @@ td {
 tr:nth-child(even) td{
 	background-color: #EFEEF2;
 }
+tr:nth-child(even) td *{
+	background-color: #EFEEF2;
+}
 table {
 	border-spacing: 0;
 	width: 100%;
 }
 #logo {
-	width: 2in;
+	width: 25%;
 	float: left;
 	padding-bottom: 7px;
 
@@ -33,17 +48,6 @@ h2 {
 	float: right;
 	text-align: right;
 }
-    html { width:7.5in; height: 10in; padding: 0; margin: 0; position: absolute}
-    body {
-    	position: absolute;
-    	margin: 0;
-    	width:7.5in; height: 10in;
-    	font-family: Verdana;
-    	font-weight: 700;
-    	font-size:  10pt;
-    	padding:0 0.5in;
-    }
-
 a {
 	text-decoration: none;
 	border-bottom: none;
@@ -72,7 +76,7 @@ thead td {
 }
 
 aside {
-	margin-left: 8.5in;
+	margin-left: 11in;
 	width: 200px;
 	padding:10px;
     border: 2px solid black;
@@ -163,8 +167,8 @@ aside {
 		page-break-inside: avoid;
 	}
 	* {
-      -webkit-print-color-adjust: exact;
-      print-color-adjust: exact;
+      -webkit-print-color-adjust: none;
+      print-color-adjust: none;
    }
 }
 
