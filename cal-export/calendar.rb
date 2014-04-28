@@ -1,3 +1,5 @@
+#!/usr/bin/ruby
+
 require 'rubygems'
 require 'google/api_client'
 require 'google/api_client/client_secrets'
@@ -43,11 +45,11 @@ configure do
       :application_name => 'Ruby Calendar sample',
       :application_version => '1.0.0')
   #Dev
-  # client.authorization.client_id = '584929164737-tjb9o70hdqgbak7rf8ou0ieq1hqc4roq.apps.googleusercontent.com'
-  # client.authorization.client_secret = 'krNcqvYNlqOE9ML_svlRq2jT'
+  client.authorization.client_id = '584929164737-tjb9o70hdqgbak7rf8ou0ieq1hqc4roq.apps.googleusercontent.com'
+  client.authorization.client_secret = 'krNcqvYNlqOE9ML_svlRq2jT'
   #Production
-  client.authorization.client_id = '584929164737-aonbt0og06f981nfribu0aejcnjfluh6.apps.googleusercontent.com'
-  client.authorization.client_secret = 'FTDuIeH-E26hfRpN47IfVnnw'
+  # client.authorization.client_id = '584929164737-aonbt0og06f981nfribu0aejcnjfluh6.apps.googleusercontent.com'
+  # client.authorization.client_secret = 'FTDuIeH-E26hfRpN47IfVnnw'
 
   client.authorization.scope = 'https://www.googleapis.com/auth/calendar.readonly'
   calendar = client.discovered_api('calendar', 'v3')
@@ -78,7 +80,7 @@ end
 
 get '/oauth2authorize' do
   # Request authorization
-  redirect user_credentials.authorization_uri.to_s, 303
+  redirect user_credentials.authorization_uri(:approval_prompt => :auto).to_s, 303
 end
 
 get '/oauth2callback' do
