@@ -45,11 +45,11 @@ configure do
       :application_name => 'Ruby Calendar sample',
       :application_version => '1.0.0')
   #Dev
-  client.authorization.client_id = '584929164737-tjb9o70hdqgbak7rf8ou0ieq1hqc4roq.apps.googleusercontent.com'
-  client.authorization.client_secret = 'krNcqvYNlqOE9ML_svlRq2jT'
+  # client.authorization.client_id = '584929164737-tjb9o70hdqgbak7rf8ou0ieq1hqc4roq.apps.googleusercontent.com'
+  # client.authorization.client_secret = 'krNcqvYNlqOE9ML_svlRq2jT'
   #Production
-  # client.authorization.client_id = '584929164737-aonbt0og06f981nfribu0aejcnjfluh6.apps.googleusercontent.com'
-  # client.authorization.client_secret = 'FTDuIeH-E26hfRpN47IfVnnw'
+  client.authorization.client_id = '584929164737-aonbt0og06f981nfribu0aejcnjfluh6.apps.googleusercontent.com'
+  client.authorization.client_secret = 'FTDuIeH-E26hfRpN47IfVnnw'
 
   client.authorization.scope = 'https://www.googleapis.com/auth/calendar.readonly'
   calendar = client.discovered_api('calendar', 'v3')
