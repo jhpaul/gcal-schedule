@@ -1,0 +1,166 @@
+body {
+	margin: 0;
+	font-size:  1.2em;
+	padding:0 0.5in;
+}
+
+
+#logo {
+	width: 30%;
+	float: left;
+	padding-bottom: 7px;
+
+}
+
+#loading{
+	display:none;
+}
+#loading > * {
+	display: inline-block;
+	padding-right: 5px;
+}
+
+
+@media all and (max-width: 520px) {
+	body, html {
+		width: 100%;
+		padding: 0;
+		padding-right: 5px;
+	}
+	header * {
+		display: block;
+		width: 100%;
+		float: none !important;
+	}
+	#logo {
+		width: inherit;
+		padding: auto;
+		height: 50px;
+		margin: auto;
+	}
+
+}
+
+#movingBallG{
+position:relative;
+width:100px;
+height:8px;
+}
+
+.movingBallLineG{
+position:absolute;
+left:0px;
+top:3px;
+height:2px;
+width:100px;
+background-color:#949494;
+}
+
+.movingBallG{
+background-color:#000000;
+position:absolute;
+top:0;
+left:0;
+width:8px;
+height:8px;
+-moz-border-radius:4px;
+-moz-animation-name:bounce_movingBallG;
+-moz-animation-duration:1.3s;
+-moz-animation-iteration-count:infinite;
+-moz-animation-direction:linear;
+-webkit-border-radius:4px;
+-webkit-animation-name:bounce_movingBallG;
+-webkit-animation-duration:1.3s;
+-webkit-animation-iteration-count:infinite;
+-webkit-animation-direction:linear;
+-ms-border-radius:4px;
+-ms-animation-name:bounce_movingBallG;
+-ms-animation-duration:1.3s;
+-ms-animation-iteration-count:infinite;
+-ms-animation-direction:linear;
+-o-border-radius:4px;
+-o-animation-name:bounce_movingBallG;
+-o-animation-duration:1.3s;
+-o-animation-iteration-count:infinite;
+-o-animation-direction:linear;
+border-radius:4px;
+animation-name:bounce_movingBallG;
+animation-duration:1.3s;
+animation-iteration-count:infinite;
+animation-direction:linear;
+}
+
+@-moz-keyframes bounce_movingBallG{
+0%{
+left:0px;
+}
+
+50%{
+left:92px;
+}
+
+100%{
+left:0px;
+}
+
+}
+
+@-webkit-keyframes bounce_movingBallG{
+0%{
+left:0px;
+}
+
+50%{
+left:92px;
+}
+
+100%{
+left:0px;
+}
+
+}
+
+@-ms-keyframes bounce_movingBallG{
+0%{
+left:0px;
+}
+
+50%{
+left:92px;
+}
+
+100%{
+left:0px;
+}
+
+}
+
+@-o-keyframes bounce_movingBallG{
+0%{
+left:0px;
+}
+
+50%{
+left:92px;
+}
+
+100%{
+left:0px;
+}
+
+}
+
+@keyframes bounce_movingBallG{
+0%{
+left:0px;
+}
+
+50%{
+left:92px;
+}
+
+100%{
+left:0px;
+}
+
+}

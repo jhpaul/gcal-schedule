@@ -2,10 +2,10 @@
 %html
   %head
     %title Daily Schedule Creator | RIPHILMS
-    %link{rel: 'stylesheet', href: '/css/style.css'}
+    %link{rel: 'stylesheet', href: '/css/index.css'}
   %body
     %h1 Daily Schedule Creator
-    %img{:src => '/img/logo-bw-500.png'}
+    %img#logo{:src => '/img/logo-bw-500.png'}
     %p
       Please select a date:
     #loading
@@ -19,8 +19,9 @@
     %ol
       %li
         %label{:for => "date"} Date:
-        %input{:type => "text", :name => "date", :class => "date", :id => "date"}
-    %input{:type => "submit", :value => "Send", :class => "button"}
+        - today = DateTime.now().strftime("%Y-%m-%d")
+        %input{:type => "text", :name => "date", :class => "date", :id => "date", :value => today}
+    %input{:type => "submit", :value => "Submit", :class => "button"}
 
 %script{:src => "//code.jquery.com/jquery-1.10.2.js"}
 %link{rel: "stylesheet", href: "//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css"}
