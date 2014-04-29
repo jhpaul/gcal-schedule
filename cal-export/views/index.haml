@@ -4,8 +4,8 @@
     %title Daily Schedule Creator | RIPHILMS
     %link{rel: 'stylesheet', href: '/css/index.css'}
   %body
-    %h1 Daily Schedule Creator
     %img#logo{:src => '/img/logo-bw-500.png'}
+    %h1 Daily Schedule Creator
     %p
       Please select a date:
     #loading
@@ -16,11 +16,9 @@
         Loading... (this could take a while) 
 %form{ :action => "", :method => "post"}
   %fieldset
-    %ol
-      %li
-        %label{:for => "date"} Date:
-        - today = DateTime.now().strftime("%Y-%m-%d")
-        %input{:type => "text", :name => "date", :class => "date", :id => "date", :value => today}
+    %label{:for => "date"} Date:
+    - today = DateTime.now().strftime("%Y-%m-%d")
+    %input{:type => "text", :name => "date", :class => "date", :id => "date", :value => today}
     %input{:type => "submit", :value => "Submit", :class => "button"}
 
 %script{:src => "//code.jquery.com/jquery-1.10.2.js"}
