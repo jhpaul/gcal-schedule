@@ -45,11 +45,11 @@ configure do
       :application_name => 'RIPHILMS Schedule Creator',
       :application_version => '1.0.0')
   #Dev
-  # client.authorization.client_id = '584929164737-tjb9o70hdqgbak7rf8ou0ieq1hqc4roq.apps.googleusercontent.com'
-  # client.authorization.client_secret = 'krNcqvYNlqOE9ML_svlRq2jT'
+  client.authorization.client_id = '584929164737-tjb9o70hdqgbak7rf8ou0ieq1hqc4roq.apps.googleusercontent.com'
+  client.authorization.client_secret = 'krNcqvYNlqOE9ML_svlRq2jT'
   #Production
-  client.authorization.client_id = '584929164737-aonbt0og06f981nfribu0aejcnjfluh6.apps.googleusercontent.com'
-  client.authorization.client_secret = 'FTDuIeH-E26hfRpN47IfVnnw'
+  # client.authorization.client_id = '584929164737-aonbt0og06f981nfribu0aejcnjfluh6.apps.googleusercontent.com'
+  # client.authorization.client_secret = 'FTDuIeH-E26hfRpN47IfVnnw'
 
   client.authorization.scope = 'https://www.googleapis.com/auth/calendar.readonly'
   calendar = client.discovered_api('calendar', 'v3')
@@ -295,18 +295,39 @@ get '/events/:post_date' do |d|
   # File.write('events.dbg', events)
   # [events.to_s]
   @eventsSort = []
-   @eventsSort = @events.sort_by {|a|
+  dbg(@events)
+  @eventsSort =   @events.sort do |a, b|
+    dbg("A")
     dbg(a)
-    if a != nil
-      if a[:location] !=nil
-        dbg(a[:location]) 
-        if a[:start][:dateTime] != nil 
-          dbg(a[:start][:dateTime])
-        [a[:location], to_datetime(a[:start][:dateTime])]
+    dbg(a[:location])
+    dbg(a[:start][:dateTime])
+    dbg("B")
+    dbg(b)
+    dbg(b[:location])
+    dbg(b[:start][:dateTime])
+    if a[:location] and b[:location] and a[:start][:dateTime] and b[:start][:dateTime]
+    (a[:location] <=> b[:location]) ||
+
+    (to_datetime(a[:start][:dateTime]) <=> to_datetime(b[:start][:dateTime]))
       end
-      end
-    end
-    }
+  end
+   # @eventsSort = @events.sort_by {|a,b|
+   #  dbg("sort")
+   #  dbg(a)
+   #  dbg(b)
+   #  dbg(a.class)
+    # if a.class == Hash and b.class == Hash
+    #   if a[:location].class == String and b[:location].class == String
+    # #     dbg(a[:location].class) 
+    #     if a[:start][:dateTime].class == String and b[:start][:dateTime].class == String
+    # #       dbg(a[:start][:dateTime].class)
+    # a[:location] == b[:location]? a[:start][:dateTime] <=> b[:start][:dateTime] : a[:location] <=> b[:location]
+    # # a[:location], a[:start][:dateTime] <=> b[:location], b[:start][:dateTime] 
+    # #     [a[:location], to_datetime(a[:start][:dateTime])]
+    #   end
+    #   end
+    # end
+    # }
   # @eventsSort = @events
   dbg("DONE")
   haml :schedule
