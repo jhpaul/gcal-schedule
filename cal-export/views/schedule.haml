@@ -63,14 +63,14 @@
       });
       $(".reset").click(function(){
         $("tr").show();
-      })
+      });
       $(".room, .start, .end").editable();
-      $(".event a").editable({
+      $(".event ").editable({
         callback: function(data){
           data.$el.unbind('click', false)
         }
-      })
+      });
       $(".event").dblclick(function(){
         $(this).find("a").dblclick().bind('click', false);
-      })
+      });
   } );

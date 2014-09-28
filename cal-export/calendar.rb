@@ -301,10 +301,10 @@ get '/events/:post_date' do |d|
     dbg(a)
     dbg(a[:location])
     dbg(a[:start][:dateTime])
-    dbg("B")
-    dbg(b)
-    dbg(b[:location])
-    dbg(b[:start][:dateTime])
+    # dbg("B")
+    # dbg(b)
+    # dbg(b[:location])
+    # dbg(b[:start][:dateTime])
     if a[:location] and b[:location] and a[:start][:dateTime] and b[:start][:dateTime]
     (a[:location] <=> b[:location]) ||
 
