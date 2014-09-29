@@ -194,7 +194,7 @@ get '/events/:post_date' do |d|
   end
   dateIn = "#{d}"+"T00:00:00" + timeZone
   @timeMin = DateTime.strptime(dateIn)
-  @timeMax = @timeMin.next
+  @timeMax = @timeMin.next - 30
   $log.debug "Min Time: "+@timeMin.to_s
   $log.debug "Max Time: "+@timeMax.to_s
 
