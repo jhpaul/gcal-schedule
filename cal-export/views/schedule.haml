@@ -6,24 +6,20 @@
     %link{rel: 'stylesheet', href: '/css/print.css', type: 'text/css', media: 'print'}
   %body
     %header
-    - if @eventsSort.class == Array 
-      / - dateLocal = DateTime.strptime(@eventsSort[1][:start][:dateTime],"%Y-%m-%d")
+    - if @sorted_events.class == Array 
       - dateStr = @timeMin.strftime("%A, %B %d, %Y")
       %img#logo(src="/img/logo-bw-500.png")
       #float-right
         %h1 Room Schedule
         %h2= dateStr
-    - if @eventsSort != Array or @eventsSort == []
-      #error No Events Found
 
     %aside
-      / %p= "Requested date: " + @post_date
       %p.instruction
         Click event title to view in Google Calendar
         %br
         %br
         Double Click area to change contents
-        %br
+        %br 
         %br
         To reset changed text, refresh page
       %p.reset
@@ -40,20 +36,20 @@
           %td Begin
           %td End
       %tbody
-        - @eventsSort.each do |row|
+        - @sorted_events.each do |row|
           %tr
             %td.hide hide
             / %td= row
             /- dbg(row)
-            - start = to_datetime(row[:start][:dateTime])
-            - stop = to_datetime(row[:end][:dateTime])
+            - start = is_starttime(row)
+            - stop = is_endtime(row)
             / - link = event_link(row[:htmlLink],row[:summary])
             - link = row[:summary]
             %td.event= link
             %td.room= row[:location]
-            %td.start= from_datetime(start)# + start.strftime
+            %td.start= from_datetime(start,row)# + start.strftime
             / %td= start.strftime("%m/%d/%Y")
-            %td.end= from_datetime(stop) # + stop.strftime
+            %td.end= from_datetime(stop,row) # + stop.strftime
 %script{:src => "//code.jquery.com/jquery-1.10.2.js"}
 %script{:src => "/js/jquery-editable-master/jquery.editable.min.js"}
 :javascript
