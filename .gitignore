@@ -1,3 +1,4 @@
 .vagrant/
 client*
 *.dbg
+log.txt
